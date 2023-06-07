@@ -1,3 +1,5 @@
+<img height="200" src="https://github.com/Antoinegtir/bereal-clone/blob/main/assets/logo/rebeal.png?raw=true"></img>
+
 # ReBeal.
 
 ReBeal is a fully functionnal BeReal clone using flutter & Firebase
