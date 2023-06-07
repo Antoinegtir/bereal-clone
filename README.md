@@ -1,11 +1,14 @@
-<img height="200" src="https://github.com/Antoinegtir/bereal-clone/blob/main/assets/rebeals.png?raw=true"></img>
-
 # ReBeal.
 
-ReBeal is a fully functionnal BeReal clone using flutter & Firebase
+<img height="200" src="https://github.com/Antoinegtir/bereal-clone/blob/main/assets/rebeals.png?raw=true"></img>
 
-Aivailable on:
 
+## Description:
+The project aims to clone the BeReal social network in order to understand how this type of application could work by re-developing it, using Flutter framework in order to reproduce with the most precision the BeReal UI & Firebase Database using noSQL request in order to bring dynamic and communauty aspect on the app and share in a common point all the data.
+
+<img src="https://skillicons.dev/icons?i=flutter,dart"/>
+
+## Aivailable on:
 iOS, MacOS, Android, Web.
 
 ## Screenshots
@@ -25,3 +28,13 @@ Profile Page                  | Edit Page       |   Crop Page      |     Setting
 Discover Page         |  Feed Page              |   Share Page
 :-------------------------:|:-------------------------:|:-------------------------:
 ![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/discover.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/feed.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/share.png?raw=true)|![]|
+
+
+## Usage
+
+- install flutter engine -> https://docs.flutter.dev/get-started/install
+- tap command `flutter run` in the root folder of the project
+
+## Author
+
+@Antoinegtir
