@@ -10,7 +10,7 @@ The project aims to clone the BeReal social network in order to understand how t
 
 Name Page               |  Birth Page               | Signup Page               |  Contact Page
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/name.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/bitrh.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/signup.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/contact.png?raw=true)|
+![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/name.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/birth.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/signup.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/contact.png?raw=true)|
 
 Notification Permission Page         |  Notification Page       |   Home Page               |  Photos Page
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
