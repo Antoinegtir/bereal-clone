@@ -25,7 +25,9 @@ Discover Page         |  Feed Page              |   Share Page | Grid Page
 ![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/discover.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/feed.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/share.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/grid.png?raw=true)|![]|
 
 
-<img src="https://skillicons.dev/icons?i=flutter,dart"/>
+## Language & Tools used:
+
+<img src="https://skillicons.dev/icons?i=flutter,dart,firebase"/>
 
 ## Aivailable on:
 iOS, MacOS, Android, Web.
