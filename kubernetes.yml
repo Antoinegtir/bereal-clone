@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ReBeal
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ReBeal
+  template:
+    metadata:
+      labels:
+        app: ReBeal
+    spec:
+      containers:
+        - name: ReBeal
+          image: ReBealConteneur
+          ports:
+            - containerPort: 8080
