@@ -73,6 +73,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+          toolbarHeight: 68,
           leading: Container(),
           flexibleSpace: Padding(
               padding: EdgeInsets.only(left: 5, top: 78),
@@ -94,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               onTap: _submitButton,
                               child: Text("Enregistrer",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 18)))
+                                      color: Colors.white, fontSize: 16)))
                         ],
                       )),
                   Container(
