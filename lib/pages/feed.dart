@@ -1,12 +1,14 @@
 // ignore_for_file: must_be_immutable
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:rebeal/model/user.dart';
 import 'package:rebeal/state/authState.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:rebeal/state/searchState.dart';
+import 'package:rebeal/widget/list.dart';
+import 'package:rebeal/widget/share.dart';
 import '../styles/color.dart';
 
 class FeedPage extends StatefulWidget {
@@ -22,6 +24,14 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
+    ContactsService.getContacts().then((contacts) {
+      for (var contact in contacts) {
+        for (var email in contact.emails!) {
+          contactEmails.add(email.value!);
+        }
+      }
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -35,11 +45,28 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    var authState = Provider.of<AuthState>(context, listen: false);
+    final state = Provider.of<SearchState>(context);
+    final list = state.userlist;
     final Map<int, Widget> children = {
       0: Text('Suggestions'),
       1: Text('Amis'),
       2: Text('Demandes'),
     };
+    List<UserModel>? following;
+    List<UserModel>? follower;
+
+    List<String>? followingkey =
+        authState.profileUserModel!.followingList?.toList();
+    List<String>? followerkey =
+        authState.profileUserModel!.followersList?.toList();
+
+    if (followingkey != null) {
+      following = state.getuserDetail(followingkey);
+    }
+    if (followerkey != null) {
+      follower = state.getuserDetail(followerkey);
+    }
     return Scaffold(
         extendBody: true,
         bottomNavigationBar: Padding(
@@ -47,6 +74,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: CupertinoSlidingSegmentedControl(
+                  backgroundColor: ReBealColor.ReBealDarkGrey,
                   thumbColor: Color.fromARGB(255, 60, 60, 60),
                   padding:
                       EdgeInsets.only(bottom: 10, top: 10, right: 10, left: 10),
@@ -79,41 +107,88 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
               child: Container(
                   color: Colors.black,
                   height: 100,
-                  child: TextField(
-                      cursorColor: Colors.white,
-                      keyboardAppearance:
-                          MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Brightness.dark
-                              : Brightness.light,
-                      style: const TextStyle(color: Colors.white),
-                      controller: _textController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          size: 28,
-                          color: ReBealColor.ReBealLightGrey,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors.transparent, width: 0.7),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors.transparent, width: 0.7),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        fillColor: ReBealColor.ReBealDarkGrey,
-                        filled: true,
-                        contentPadding: const EdgeInsets.only(left: 15, top: 5),
-                        alignLabelWithHint: true,
-                        hintText: 'Ajouter ou recherecher des amis',
-                        hintStyle: const TextStyle(
-                            fontSize: 17,
-                            color: ReBealColor.ReBealLightGrey,
-                            fontFamily: "arial"),
-                      )))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                          width: _textController.text.isNotEmpty
+                              ? MediaQuery.of(context).size.width / 1 - 100
+                              : MediaQuery.of(context).size.width / 1 - 20,
+                          height: 70,
+                          child: TextField(
+                              cursorColor: Colors.white,
+                              keyboardAppearance:
+                                  MediaQuery.of(context).platformBrightness ==
+                                          Brightness.dark
+                                      ? Brightness.dark
+                                      : Brightness.light,
+                              onChanged: (value) {
+                                state.filterByUsername(value);
+                              },
+                              style: const TextStyle(color: Colors.white),
+                              controller: _textController,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                  size: 28,
+                                  color: ReBealColor.ReBealLightGrey,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.transparent, width: 0.7),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.transparent, width: 0.7),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                fillColor: ReBealColor.ReBealDarkGrey,
+                                filled: true,
+                                suffixIcon: !_textController.text.isNotEmpty
+                                    ? SizedBox.shrink()
+                                    : GestureDetector(
+                                        onTap: () {
+                                          _textController.clear();
+                                        },
+                                        child: Icon(
+                                          CupertinoIcons.clear_circled_solid,
+                                          color: Colors.grey,
+                                          size: 18,
+                                        )),
+                                contentPadding:
+                                    const EdgeInsets.only(left: 15, top: 5),
+                                alignLabelWithHint: true,
+                                hintText: 'Ajouter ou recherecher des amis',
+                                hintStyle: const TextStyle(
+                                    fontSize: 17,
+                                    color: ReBealColor.ReBealLightGrey,
+                                    fontFamily: "arial"),
+                              ))),
+                      _textController.text.isNotEmpty
+                          ? GestureDetector(
+                              onTap: () {
+                                _textController.clear();
+                                setState(() {
+                                  _textController.clearComposing();
+                                });
+                              },
+                              child: Container(
+                                  width: 80,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    "Annuler\n",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontFamily: "arial",
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
+                                  )))
+                          : SizedBox.shrink()
+                    ],
+                  ))),
           title: Padding(
               padding: EdgeInsets.only(bottom: 60),
               child: Image.asset(
@@ -122,214 +197,243 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
               )),
           backgroundColor: Colors.black,
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            TabBarReBeal(
-              i: 0,
-              key: widget.key,
-            ),
-            TabBarReBeal(
-              i: 1,
-              key: widget.key,
-            ),
-            TabBarReBeal(
-              i: 2,
-              key: widget.key,
-            )
-          ],
-        ));
-  }
-}
-
-class TabBarReBeal extends StatefulWidget {
-  int i;
-  TabBarReBeal({required this.i, super.key});
-
-  @override
-  State<TabBarReBeal> createState() => _SuggestionsState();
-}
-
-class _SuggestionsState extends State<TabBarReBeal> {
-  List<String> contactEmails = [];
-  @override
-  void initState() {
-    ContactsService.getContacts().then((contacts) {
-      for (var contact in contacts) {
-        for (var email in contact.emails!) {
-          contactEmails.add(email.value!);
-        }
-      }
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  void _shareText(String text) {
-    Share.share(
-      text,
-      subject: "Ajoute-moi sur ReBeal.",
-      sharePositionOrigin: Rect.fromLTWH(0, 0, 10, 10),
-    );
-  }
-
-  String _text() {
-    if (widget.i == 0) return "AJOUTER TES CONTACTS";
-    if (widget.i == 1) return "MES AMIS (${widget.i})";
-    if (widget.i == 2) return "DEMANDES D'AMI (${widget.i})";
-    // ignore: null_check_always_fails
-    return null!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var state = Provider.of<AuthState>(context);
-    return Column(
-      children: [
-        Padding(
-            padding: EdgeInsets.only(top: 30, left: 10, right: 10),
-            child: GestureDetector(
-                onTap: () {
-                  _shareText(
-                      "rebe.al/${state.profileUserModel!.userName!.replaceAll("@", "").toLowerCase()}");
-                },
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width,
-                      color: ReBealColor.ReBealDarkGrey,
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: _textController.text.isNotEmpty
+            ? Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      addAutomaticKeepAlives: false,
+                      itemBuilder: (context, index) {
+                        return UserTilePage(
+                          user: list![index],
+                          isadded: false,
+                        );
+                      },
+                      itemCount: list?.length ?? 0,
+                    ),
+                  )
+                ],
+              )
+            : TabBarView(
+                controller: _tabController,
+                children: [
+                  Stack(
+                    children: [
+                      ListView(
                         children: [
-                          Row(
-                            children: [
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Container(
-                                    height: 40,
-                                    width: 40,
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      height: 100,
-                                      imageUrl: state
-                                          .profileUserModel!.profilePic
-                                          .toString(),
-                                    ),
-                                  )),
-                              Container(
-                                width: 10,
-                              ),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Invite tes amis sur ReBeal\n',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          'rebe.al/${state.profileUserModel!.userName!.replaceAll("@", "").toLowerCase()}',
-                                      style: TextStyle(
-                                        color: ReBealColor.ReBealLightGrey,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
                           Container(
-                            width: 30,
+                              width: 100,
+                              height: MediaQuery.of(context).size.height / 1.2,
+                              child: Column(
+                                children: [
+                                  ShareButton(),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "AJOUTER TES CONTACTS",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                      child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: 4,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                          title: Text(contactEmails[index]),
+                                          leading: Icon(
+                                            CupertinoIcons.profile_circled,
+                                            size: 50,
+                                          ),
+                                          trailing: Container(
+                                              width: 120,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                      height: 30,
+                                                      width: 90,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromARGB(
+                                                              221, 69, 69, 69),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      90)),
+                                                      child: Text(
+                                                        "AJOUTER",
+                                                        style: TextStyle(
+                                                            fontSize: 13,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800),
+                                                      )),
+                                                  Container(
+                                                    width: 10,
+                                                  ),
+                                                  Icon(
+                                                    Icons.close,
+                                                    size: 18,
+                                                    color: ReBealColor
+                                                        .ReBealLightGrey,
+                                                  )
+                                                ],
+                                              )));
+                                    },
+                                  )),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "PERSONNES QUE TU DOIS CONNAITRE",
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 203, 203, 203),
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                    height: 5,
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      addAutomaticKeepAlives: false,
+                                      itemBuilder: (context, index) {
+                                        return UserTilePage(
+                                          user: list![index],
+                                          isadded: false,
+                                        );
+                                      },
+                                      itemCount: list?.length ?? 0,
+                                    ),
+                                  )
+                                ],
+                              ))
+                        ],
+                      ),
+                      IgnorePointer(
+                          child: Container(
+                              height: 200,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      begin: Alignment.bottomRight,
+                                      end: Alignment.topRight,
+                                      colors: [
+                                    for (double i = 1; i > 0; i -= 0.01)
+                                      Colors.black.withOpacity(i),
+                                  ]))))
+                    ],
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Column(
+                    children: [
+                      ShareButton(),
+                      Row(
+                        children: [
+                          Container(
+                            width: 10,
                           ),
-                          Icon(
-                            CupertinoIcons.share,
-                            color: Colors.white,
-                            size: 22,
+                          Text(
+                            "MES AMIS (${following?.length ?? 0})",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13),
                           )
                         ],
                       ),
-                    )))),
-        Container(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Container(
-              width: 10,
-            ),
-            Text(
-              _text(),
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13),
-            )
-          ],
-        ),
-        _text() == "AJOUTER TES CONTACTS"
-            ? Expanded(
-                child: ListView.builder(
-                itemCount: contactEmails.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                      title: Text(contactEmails[index]),
-                      leading: Icon(CupertinoIcons.profile_circled),
-                      trailing: Container(
-                          width: 120,
+                      Expanded(
+                        child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              return UserTilePage(
+                                user: following![index],
+                                isadded: true,
+                              );
+                            },
+                            itemCount: following?.length ?? 0),
+                      ),
+                    ],
+                  ),
+                  ListView(
+                    children: [
+                      ShareButton(),
+                      Padding(
+                          padding: EdgeInsets.only(left: 15, right: 16),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Text(
+                                "DEMANDES D'AMI (${follower?.length ?? 0})",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13),
+                              ),
                               Container(
-                                  height: 30,
-                                  width: 90,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: ReBealColor.ReBealDarkGrey,
-                                      borderRadius: BorderRadius.circular(90)),
-                                  child: Text(
-                                    "AJOUTER",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800),
-                                  )),
-                              Container(
-                                width: 10,
+                                width: MediaQuery.of(context).size.width / 3,
+                              ),
+                              Text(
+                                "Envoyées ",
+                                style: TextStyle(
+                                    color: ReBealColor.ReBealLightGrey,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13),
                               ),
                               Icon(
-                                Icons.close,
-                                size: 18,
                                 color: ReBealColor.ReBealLightGrey,
-                              )
+                                Icons.arrow_forward_ios,
+                                size: 13,
+                              ),
                             ],
-                          )));
-                },
-              ))
-            : Container(),
-        Row(
-          children: [
-            Container(
-              width: 10,
-            ),
-            Text(
-              "PERSONNES QUE TU DOIS CONNAITRE",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13),
-            )
-          ],
-        ),
-        Container(height: 260,)
-      ],
-    );
+                          )),
+                      Container(
+                        height: 10,
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "Assure toi d'accepter seulement tes vrais amis sur ReBeal.",
+                            style: TextStyle(
+                                color: ReBealColor.ReBealDarkGrey,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15),
+                          )),
+                      Container(
+                        height: 2000,
+                        child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return UserTilePage(
+                                user: follower![index],
+                                isadded: true,
+                              );
+                            },
+                            itemCount: follower?.length ?? 0),
+                      )
+                    ],
+                  ),
+                ],
+              ));
   }
 }
