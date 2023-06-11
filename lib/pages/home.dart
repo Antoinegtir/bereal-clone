@@ -1,16 +1,20 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:awesome_icons/awesome_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:rebeal/camera/camera.dart';
+import 'package:rebeal/model/post.dart';
+import 'package:rebeal/model/user.dart';
 import 'package:rebeal/state/authState.dart';
+import 'package:rebeal/state/post.dart';
+import 'package:rebeal/state/searchState.dart';
 import 'package:rebeal/styles/color.dart';
-import 'package:rebeal/pages/profile.dart';
+import 'package:rebeal/pages/myprofile.dart';
 import 'package:rebeal/widget/feedpost.dart';
 import 'package:rebeal/widget/gridpost.dart';
+import 'package:rebeal/widget/list.dart';
 import '../widget/custom/rippleButton.dart';
 import 'feed.dart';
 
@@ -23,17 +27,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
-  late TabController _discoverTabController;
   ScrollController _scrollController = ScrollController();
   bool _isScrolledDown = false;
   bool _isGrid = false;
-  bool _isDiscover = false;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initPosts();
+      initSearch();
+      initProfile();
+    });
     _scrollController.addListener(_scrollListener);
-    _tabController = TabController(length: 2, vsync: this);
-    _discoverTabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -41,9 +47,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    _discoverTabController.dispose();
     _tabController.dispose();
     super.dispose();
+  }
+
+  void initSearch() {
+    var searchState = Provider.of<SearchState>(context, listen: false);
+    searchState.getDataFromDatabase();
+  }
+
+  void initProfile() {
+    var state = Provider.of<AuthState>(context, listen: false);
+    state.databaseInit();
+  }
+
+  void initPosts() {
+    var state = Provider.of<PostState>(context, listen: false);
+    state.databaseInit();
+    state.getDataFromDatabase();
   }
 
   void _scrollListener() {
@@ -75,7 +96,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   int tab = 0;
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<AuthState>(context);
+    var authState = Provider.of<AuthState>(context, listen: false);
+    final state = Provider.of<SearchState>(context);
+
+    authState.getCurrentUser().then((value) {
+      setState(() {});
+    });
     return Scaffold(
         extendBody: true,
         bottomNavigationBar: AnimatedOpacity(
@@ -122,39 +148,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   size: 30,
                 )),
           ),
-          toolbarHeight: 50,
+          toolbarHeight: 37,
           flexibleSpace: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 10, top: 68),
+                padding: EdgeInsets.only(right: 10, top: 59),
                 child: GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ProfilePage()));
+                              builder: (context) => const MyProfilePage()));
                     },
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: Container(
-                            height: 35,
-                            width: 35,
+                            height: 30,
+                            width: 30,
                             child: CachedNetworkImage(
-                                imageUrl: state.profileUserModel!.profilePic
-                                        .toString())))),
+                                imageUrl: authState.profileUserModel?.profilePic
+                                        .toString() ??
+                                    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg")))),
               )
             ],
           ),
-          bottom: _isScrolledDown && tab != 1
+          bottom: _isScrolledDown && tab != 1 || _isGrid
               ? null
               : TabBar(
                   onTap: (index) {
                     setState(() {
                       tab = index;
                     });
-                    print(tab);
                     HapticFeedback.mediumImpact();
                   },
                   controller: _tabController,
@@ -166,24 +192,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   tabs: [
                     FadeInUp(
                         child: Padding(
-                            padding: EdgeInsets.only(left: 50),
+                            padding: EdgeInsets.only(left: 20),
                             child: Tab(
                               child: Text(
                                 'Mes Amis',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ))),
                     FadeInUp(
                         child: Padding(
-                      padding: EdgeInsets.only(right: 50),
+                      padding: EdgeInsets.only(right: 0),
+                      child: Tab(
+                          child: Text(
+                        'Amis d\'Amis',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
+                    )),
+                    FadeInUp(
+                        child: Padding(
+                      padding: EdgeInsets.only(right: 20),
                       child: Tab(
                           child: Text(
                         'Discovery',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       )),
@@ -202,395 +240,210 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 opacity: 1,
                 duration: Duration(milliseconds: 500),
                 child: _isGrid
-                    ? TabBarView(controller: _tabController, children: [
-                        RefreshIndicator(
-                            color: Colors.transparent,
-                            backgroundColor: Colors.transparent,
-                            onRefresh: () {
-                              HapticFeedback.mediumImpact();
-                              return _bodyView();
-                            },
-                            child: AnimatedOpacity(
-                                opacity: _isGrid ? 1 : 0,
-                                duration: Duration(milliseconds: 1000),
-                                child: GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            childAspectRatio: 0.8,
-                                            mainAxisSpacing: 10,
-                                            crossAxisSpacing: 10),
-                                    controller: _scrollController,
-                                    itemCount: 10,
-                                    itemBuilder: (context, index) {
-                                      return GridPostWidget();
-                                    }))),
-                        Container()
-                      ])
-                    : TabBarView(controller: _tabController, children: [
-                        RefreshIndicator(
-                            color: Colors.transparent,
-                            backgroundColor: Colors.transparent,
-                            onRefresh: () {
-                              HapticFeedback.mediumImpact();
+                    ? TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        controller: _tabController,
+                        children: [
+                            Consumer<PostState>(
+                                builder: (context, state, child) {
+                              final now = DateTime.now();
+                              final List<PostModel>? list = state
+                                  .getPostLists(authState.userModel)!
+                                  .where((x) =>
+                                      now
+                                          .difference(
+                                              DateTime.parse(x.createdAt))
+                                          .inHours <
+                                      24)
+                                  .toList();
+                              while (list!.length < 10) {
+                                list.add(PostModel(
+                                  imageFrontPath:
+                                      "https://htmlcolorcodes.com/assets/images/colors/black-color-solid-background-1920x1080.png",
+                                  imageBackPath:
+                                      "https://htmlcolorcodes.com/assets/images/colors/black-color-solid-background-1920x1080.png",
+                                  createdAt: "",
+                                  user: UserModel(
+                                    displayName: "",
+                                  ),
+                                ));
+                              }
+                              return RefreshIndicator(
+                                  color: Colors.transparent,
+                                  backgroundColor: Colors.transparent,
+                                  onRefresh: () {
+                                    HapticFeedback.mediumImpact();
+                                    return _bodyView();
+                                  },
+                                  child: AnimatedOpacity(
+                                      opacity: _isGrid ? 1 : 0,
+                                      duration: Duration(milliseconds: 1000),
+                                      child: Padding(
+                                          padding: EdgeInsets.all(15),
+                                          child: GridView.builder(
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 3,
+                                                      childAspectRatio: 0.8,
+                                                      mainAxisSpacing: 10,
+                                                      crossAxisSpacing: 10),
+                                              controller: _scrollController,
+                                              itemCount: list.length,
+                                              itemBuilder: (context, index) {
+                                                return GridPostWidget(
+                                                    postModel: list[index]);
+                                              }))));
+                            }),
+                          ])
+                    : TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        controller: _tabController,
+                        children: [
+                            Consumer<PostState>(
+                                builder: (context, state, child) {
+                              final List<PostModel>? list =
+                                  state.getPostList(authState.userModel);
 
-                              return _bodyView();
-                            },
-                            child: AnimatedOpacity(
-                                opacity: !_isGrid ? 1 : 0,
-                                duration: Duration(milliseconds: 300),
-                                child: ListView.builder(
-                                    controller: _scrollController,
-                                    itemCount: 10,
-                                    itemBuilder: (context, index) {
-                                      return FeedPostWidget();
-                                    }))),
-                        Column(
-                          children: [
-                            Container(
-                              height: 170,
-                            ),
-                            Row(
+                              return RefreshIndicator(
+                                  color: Colors.transparent,
+                                  backgroundColor: Colors.transparent,
+                                  onRefresh: () {
+                                    HapticFeedback.mediumImpact();
+                                    return _bodyView();
+                                  },
+                                  child: AnimatedOpacity(
+                                      opacity: !_isGrid ? 1 : 0,
+                                      duration: Duration(milliseconds: 300),
+                                      child: ListView.builder(
+                                          controller: _scrollController,
+                                          itemCount: list?.length ?? 0,
+                                          itemBuilder: (context, index) {
+                                            return FeedPostWidget(
+                                              postModel: list![index],
+                                            );
+                                          })));
+                            }),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  width: 10,
+                                  height: 140,
                                 ),
-                                GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _isDiscover = false;
-                                      });
-                                      _discoverTabController.animateTo(0);
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                          color: _isDiscover
-                                              ? ReBealColor.ReBealDarkGrey
-                                              : Colors.white,
-                                          height: 38,
-                                          alignment: Alignment.center,
-                                          width: 130,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.people_alt_outlined,
-                                                size: 18,
-                                                color: _isDiscover
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                              Container(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                "Amis d'Amis",
-                                                style: TextStyle(
-                                                    color: _isDiscover
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ],
-                                          )),
-                                    )),
                                 Container(
-                                  width: 15,
-                                ),
-                                GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _isDiscover = true;
-                                      });
-                                      _discoverTabController.animateTo(1);
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                          color: !_isDiscover
-                                              ? ReBealColor.ReBealDarkGrey
-                                              : Colors.white,
-                                          height: 38,
-                                          alignment: Alignment.center,
-                                          width: 100,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                FontAwesomeIcons.globeAmericas,
-                                                size: 18,
-                                                color: !_isDiscover
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                              Container(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                "Global",
-                                                style: TextStyle(
-                                                    color: !_isDiscover
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ],
-                                          )),
-                                    )),
-                              ],
-                            ),
-                            Expanded(
-                                child: TabBarView(
-                                    controller: _discoverTabController,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.1,
+                                  decoration: BoxDecoration(
+                                      color: ReBealColor.ReBealDarkGrey,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  alignment: Alignment.topCenter,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        height: 15,
-                                      ),
-                                      ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Container(
-                                              color: ReBealColor.ReBealDarkGrey,
-                                              height: 370,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  1.05,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 20, left: 10),
-                                                      child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          child: Container(
-                                                            height: 25,
-                                                            width: 40,
-                                                            color: Colors.white,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              "NEW",
-                                                              style: TextStyle(
-                                                                  fontSize: 13,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w800),
-                                                            ),
-                                                          ))),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 10, left: 10),
-                                                      child: Text(
-                                                        "DÉCOUVRE TES\nAMIS D'AMIS",
-                                                        style: TextStyle(
-                                                            fontSize: 28,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                      )),
-                                                  Container(
-                                                    height: 170,
-                                                  ),
-                                                  // Expanded(
-                                                  //     child: Column(
-                                                  //   children: [
-                                                  //     Container(
-                                                  //       height: 10,
-                                                  //     ),
-                                                  //     Row(
-                                                  //       children: [
-                                                  //         Container(
-                                                  //           width: 10,
-                                                  //         ),
-                                                  //         ClipRRect(
-                                                  //             borderRadius:
-                                                  //                 BorderRadius
-                                                  //                     .circular(
-                                                  //                         50),
-                                                  //             child: Container(
-                                                  //                 height: 50,
-                                                  //                 width: 50,
-                                                  //                 child:
-                                                  //                     CachedNetworkImage(
-                                                  //                   imageUrl:
-                                                  //                       "https://media.licdn.com/dms/image/C5603AQFJaweFQUPOXQ/profile-displayphoto-shrink_800_800/0/1562268806964?e=2147483647&v=beta&t=gmhmjbx0KPgtoEBg_bKGyTtGQqa_qjPpw7UEPh4P6Ow",
-                                                  //                 ))),
-                                                  //         Container(
-                                                  //           width: 10,
-                                                  //         ),
-                                                  //         Text.rich(
-                                                  //           TextSpan(
-                                                  //             children: [
-                                                  //               TextSpan(
-                                                  //                 text:
-                                                  //                     'Antoine\n',
-                                                  //                 style:
-                                                  //                     TextStyle(
-                                                  //                   fontSize:
-                                                  //                       16,
-                                                  //                   color: Colors
-                                                  //                       .white,
-                                                  //                   fontWeight:
-                                                  //                       FontWeight
-                                                  //                           .w700,
-                                                  //                 ),
-                                                  //               ),
-                                                  //               TextSpan(
-                                                  //                 text:
-                                                  //                     '4 amis en commun',
-                                                  //                 style:
-                                                  //                     TextStyle(
-                                                  //                   color: Colors
-                                                  //                       .grey,
-                                                  //                   fontWeight:
-                                                  //                       FontWeight
-                                                  //                           .w500,
-                                                  //                 ),
-                                                  //               ),
-                                                  //             ],
-                                                  //           ),
-                                                  //         ),
-                                                  //       ],
-                                                  //     ),
-                                                  //     Container(
-                                                  //       height: 20,
-                                                  //     ),
-                                                  //     Row(
-                                                  //       children: [
-                                                  //         Container(
-                                                  //           width: 10,
-                                                  //         ),
-                                                  //         ClipRRect(
-                                                  //             borderRadius:
-                                                  //                 BorderRadius
-                                                  //                     .circular(
-                                                  //                         50),
-                                                  //             child: Container(
-                                                  //                 height: 50,
-                                                  //                 width: 50,
-                                                  //                 child:
-                                                  //                     CachedNetworkImage(
-                                                  //                   imageUrl:
-                                                  //                       "https://media.licdn.com/dms/image/C5603AQFJaweFQUPOXQ/profile-displayphoto-shrink_800_800/0/1562268806964?e=2147483647&v=beta&t=gmhmjbx0KPgtoEBg_bKGyTtGQqa_qjPpw7UEPh4P6Ow",
-                                                  //                 ))),
-                                                  //         Container(
-                                                  //           width: 10,
-                                                  //         ),
-                                                  //         Text.rich(
-                                                  //           TextSpan(
-                                                  //             children: [
-                                                  //               TextSpan(
-                                                  //                 text:
-                                                  //                     'Antoine\n',
-                                                  //                 style:
-                                                  //                     TextStyle(
-                                                  //                   fontSize:
-                                                  //                       16,
-                                                  //                   color: Colors
-                                                  //                       .white,
-                                                  //                   fontWeight:
-                                                  //                       FontWeight
-                                                  //                           .w700,
-                                                  //                 ),
-                                                  //               ),
-                                                  //               TextSpan(
-                                                  //                 text:
-                                                  //                     '2 amis en commun',
-                                                  //                 style:
-                                                  //                     TextStyle(
-                                                  //                   color: Colors
-                                                  //                       .grey,
-                                                  //                   fontWeight:
-                                                  //                       FontWeight
-                                                  //                           .w500,
-                                                  //                 ),
-                                                  //               ),
-                                                  //             ],
-                                                  //           ),
-                                                  //         ),
-                                                  //       ],
-                                                  //     )
-                                                  //   ],
-                                                  // )),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 15,
-                                                          bottom: 20,
-                                                          right: 15),
-                                                      child: RippleButton(
-                                                          splashColor: Colors
-                                                              .transparent,
-                                                          child: Container(
-                                                              height: 55,
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  40,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15),
-                                                              ),
-                                                              child: Center(
-                                                                  child: Text(
-                                                                "Partager ton ReBeal pour découvrir",
-                                                                style: TextStyle(
-                                                                    fontFamily:
-                                                                        "icons.ttf",
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
-                                                              ))),
-                                                          onPressed: () {})),
-                                                ],
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 20, left: 10),
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              child: Container(
+                                                height: 25,
+                                                width: 40,
+                                                color: Colors.white,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "NEW",
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
                                               ))),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 10, left: 10),
+                                          child: Text(
+                                            "DÉCOUVRE TES\nAMIS D'AMIS",
+                                            style: TextStyle(
+                                                fontSize: 28,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700),
+                                          )),
                                       Container(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Ton ReBeal sera visible par tes Amis d'Amis.\nLes réglages de partage peuvent être changé à\ntout moment.",
-                                        style: TextStyle(
-                                            fontFamily: "icons.ttf",
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w300),
-                                        textAlign: TextAlign.center,
-                                      )
+                                          height: 300,
+                                          child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                  height: 60,
+                                                  child: UserTilePage(
+                                                    user:
+                                                        state.userlist![index],
+                                                    isadded: true,
+                                                  ));
+                                            },
+                                            itemCount: 2,
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 15,
+                                            bottom: 20,
+                                            right: 15,
+                                          ),
+                                          child: RippleButton(
+                                              splashColor: Colors.transparent,
+                                              child: Container(
+                                                  height: 55,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      40,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  child: Center(
+                                                      child: Text(
+                                                    "Partager ton ReBeal pour découvrir",
+                                                    style: TextStyle(
+                                                        fontFamily: "icons.ttf",
+                                                        color: Colors.black,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ))),
+                                              onPressed: () {})),
                                     ],
                                   ),
-                                  ListView.builder(
-                                      controller: _scrollController,
-                                      itemCount: 10,
-                                      itemBuilder: (context, index) {
-                                        return FeedPostWidget();
-                                      })
-                                ]))
-                          ],
-                        )
-                      ]))));
+                                ),
+                              ],
+                            ),
+                            Consumer<PostState>(
+                                builder: (context, state, child) {
+                              final now = DateTime.now();
+                              final List<PostModel>? list = state
+                                  .getPostLists(authState.userModel)!
+                                  .where((x) =>
+                                      now
+                                          .difference(
+                                              DateTime.parse(x.createdAt))
+                                          .inHours <
+                                      24)
+                                  .toList();
+                              return ListView.builder(
+                                  controller: _scrollController,
+                                  itemCount: list?.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    return FeedPostWidget(
+                                      postModel: list![index],
+                                    );
+                                  });
+                            }),
+                          ]))));
   }
 }
