@@ -5,7 +5,7 @@
 
 ## Description:
 The project aims to clone the BeReal social network in order to understand how this type of application could work, using Flutter framework & Firebase Database.
-This repository is use for educationnal content and as a challenge to clone the biggest part of this app in 48h, don't hesitate to read the contributing.md if you wanna add some cool functionnality that could inspire the officiel @BeReal org to implement them.
+This repository is use for educationnal content and as a challenge to clone the biggest part of this app in 48h, don't hesitate to read the contributing.md if you wanna add some cool functionnality that could inspire the official @BeReal org to implement them.
 
 ## Screenshots
 
