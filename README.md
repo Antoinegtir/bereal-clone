@@ -24,14 +24,14 @@ Discover Page         |  Feed Page              |   Share Page | Grid Page
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/discover.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/feed.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/share.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/grid.png?raw=true)|![]|
 
-Profile Page         |  Search Page              |   Request Page | Grid Page
+Profile Page         |  Search Page              |   Request Page
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/profiles.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/search.png?raw=true)|![](https://github.com/Antoinegtir/bereal-clone/blob/main/screenshot/request.png?raw=true)|![]|
 
 
 ## Language & Tools used:
 
-<img src="https://skillicons.dev/icons?i=flutter,dart,firebase"/>
+<img src="https://skillicons.dev/icons?i=flutter,dart,firebase,docker,kubernetes"/>
 
 ## Aivailable on:
 iOS, MacOS, Android, Web.
