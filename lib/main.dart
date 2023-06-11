@@ -7,6 +7,7 @@ import 'package:rebeal/state/appState.dart';
 import 'package:rebeal/state/authState.dart';
 import 'package:provider/provider.dart';
 import 'package:rebeal/state/post.dart';
+import 'package:rebeal/state/searchState.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 List<CameraDescription> cameras = [];
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AppStates>(create: (_) => AppStates()),
         ChangeNotifierProvider<AuthState>(create: (_) => AuthState()),
         ChangeNotifierProvider<PostState>(create: (_) => PostState()),
+        ChangeNotifierProvider<SearchState>(create: (_) => SearchState()),
       ],
       child: MaterialApp(
           theme: ThemeData(brightness: Brightness.dark),
