@@ -7,6 +7,7 @@ class PostModel {
   String? key;
   String? imageFrontPath;
   String? imageBackPath;
+  String? bio;
   late String createdAt;
   UserModel? user;
   List<String?>? comment;
@@ -15,6 +16,7 @@ class PostModel {
     this.key,
     required this.createdAt,
     this.imageFrontPath,
+    this.bio,
     this.imageBackPath,
     this.user,
   });
@@ -22,6 +24,7 @@ class PostModel {
   toJson() {
     return {
       "createdAt": createdAt,
+      "bio": bio,
       "imageBackPath": imageBackPath,
       "imageFrontPath": imageFrontPath,
       "user": user == null ? null : user!.toJson(),
@@ -30,7 +33,8 @@ class PostModel {
 
   PostModel.fromJson(Map<dynamic, dynamic> map) {
     key = map['key'];
-    imageFrontPath = map['imageFrontPath'];
+    bio = map['bio'];
+    imageBackPath = map['imageBackPath'];
     createdAt = map['createdAt'];
     imageFrontPath = map['imageFrontPath'];
     user = UserModel.fromJson(map['user']);
