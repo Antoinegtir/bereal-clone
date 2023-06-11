@@ -4,6 +4,7 @@ import 'package:rebeal/auth/name.dart';
 import 'package:rebeal/helper/enum.dart';
 import 'package:rebeal/state/authState.dart';
 import 'package:rebeal/pages/home.dart';
+import 'package:rebeal/state/profile_state.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -37,11 +38,11 @@ class _SplashPageState extends State<SplashPage> {
     var state = Provider.of<AuthState>(context);
     return Scaffold(
       backgroundColor: Colors.black,
-      body: state.authStatus == AuthStatus.NOT_DETERMINED
-          ? Container()
-          : state.authStatus == AuthStatus.NOT_LOGGED_IN
-              ? const NamePage()
-              : const HomePage(),
+      body: state.authStatus == AuthStatus.NOT_LOGGED_IN
+          ? const NamePage()
+          : MultiProvider(providers: [
+              ChangeNotifierProvider<ProfileState>(create: (_) => ProfileState(state.userId)),
+            ], child: HomePage()),
     );
   }
 }
