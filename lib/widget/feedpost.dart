@@ -1,11 +1,48 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:rebeal/model/post.dart';
 
-class FeedPostWidget extends StatelessWidget {
-  const FeedPostWidget({super.key});
+class FeedPostWidget extends StatefulWidget {
+  PostModel postModel;
+  FeedPostWidget({required this.postModel, super.key});
+
+  @override
+  State<FeedPostWidget> createState() => _FeedPostWidgetState();
+}
+
+class _FeedPostWidgetState extends State<FeedPostWidget> {
+  bool switcher = false;
+  void switcherFunc() {
+    setState(() {
+      switcher = !switcher;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    String localisation;
+    if (widget.postModel.user?.localisation.toString().replaceAll("null", "") ==
+        "") {
+      localisation = "";
+    } else {
+      localisation = widget.postModel.user!.localisation.toString() + " •";
+    }
+
+    DateTime now = DateTime.now();
+    DateTime createdAt = DateTime.parse(widget.postModel.createdAt);
+    Duration difference = now.difference(createdAt);
+
+    String timeAgo;
+
+    if (difference.inSeconds < 60) {
+      timeAgo = 'Il y a quelques secondes';
+    } else if (difference.inMinutes < 60) {
+      int minutes = difference.inMinutes;
+      timeAgo = 'Il y a $minutes minute${minutes > 1 ? 's' : ''}';
+    } else {
+      int hours = difference.inHours;
+      timeAgo = 'Il y a $hours heure${hours > 1 ? 's' : ''}';
+    }
     return Container(
         color: Colors.black,
         height: MediaQuery.of(context).size.height / 1.3,
@@ -16,11 +53,8 @@ class FeedPostWidget extends StatelessWidget {
               height: 20,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  width: 10,
-                ),
                 ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -28,23 +62,21 @@ class FeedPostWidget extends StatelessWidget {
                         width: 35,
                         child: CachedNetworkImage(
                           imageUrl:
-                              "https://avatars.githubusercontent.com/u/114834504?v=4",
+                              widget.postModel.user!.profilePic.toString(),
                         ))),
-                Container(
-                  width: 10,
-                ),
                 Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Antoine\n',
+                        text: widget.postModel.user!.displayName.toString() +
+                            "\n",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       TextSpan(
-                        text: '6h late',
+                        text: "$localisation $timeAgo",
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.w500,
@@ -54,7 +86,7 @@ class FeedPostWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width / 1.6,
+                  width: MediaQuery.of(context).size.width / 3,
                 ),
                 Icon(Icons.more_horiz, color: Colors.white)
               ],
@@ -62,39 +94,59 @@ class FeedPostWidget extends StatelessWidget {
             Container(
               height: 10,
             ),
-            ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                    height: MediaQuery.of(context).size.height / 1.63,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(
-                      children: [
-                        FittedBox(
-                            fit: BoxFit.cover,
-                            child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height / 1.63,
-                                child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl:
-                                        "https://www.pixfan.com/wp-content/uploads/2020/06/plus_belles_citations.jpg"))),
-                        Padding(
-                            padding: EdgeInsets.all(20),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                    height:
-                                        MediaQuery.of(context).size.height / 6,
-                                    width:
-                                        MediaQuery.of(context).size.width / 3.9,
+            GestureDetector(
+                onTap: switcherFunc,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Container(
+                        height: MediaQuery.of(context).size.height / 1.63,
+                        width: MediaQuery.of(context).size.width,
+                        child: Stack(
+                          children: [
+                            FittedBox(
+                                fit: BoxFit.cover,
+                                child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height /
+                                        1.63,
                                     child: CachedNetworkImage(
                                         fit: BoxFit.cover,
-                                        imageUrl:
-                                            "https://media.istockphoto.com/id/1329031407/fr/photo/jeune-homme-avec-sac-à-dos-prenant-un-portrait-selfie-sur-une-montagne-sourire-heureux-gars.jpg?s=612x612&w=0&k=20&c=fJX0Jn-UrIfitSbS6yJVpdz4b4xSeSfpa8fAUfQjpHY=")))),
-                      ],
-                    )))
+                                        imageUrl: switcher
+                                            ? widget.postModel.imageFrontPath
+                                                .toString()
+                                            : widget.postModel.imageBackPath
+                                                .toString()))),
+                            Padding(
+                                padding: EdgeInsets.all(20),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                6,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                3.9,
+                                        child: CachedNetworkImage(
+                                            fit: BoxFit.cover,
+                                            imageUrl: !switcher
+                                                ? widget
+                                                    .postModel.imageFrontPath
+                                                    .toString()
+                                                : widget.postModel.imageBackPath
+                                                    .toString())))),
+                          ],
+                        )))),
+            Padding(
+                padding: EdgeInsets.only(top: 10, left: 10),
+                child: Text(
+                  "Antoine Gonthier",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.left,
+                ))
           ],
+          crossAxisAlignment: CrossAxisAlignment.start,
         ));
   }
 }
