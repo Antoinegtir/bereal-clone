@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'dart:io';
 import 'dart:math';
 import 'package:camera/camera.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-import 'package:rebeal/camera/timer.dart';
 import 'package:rebeal/model/post.dart';
 import 'package:rebeal/model/user.dart';
 import 'package:rebeal/state/authState.dart';
@@ -36,10 +34,10 @@ class _CameraPageState extends State<CameraPage> with TickerProviderStateMixin {
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
   bool _changingCameraLens = false;
   bool flashEnabled = false;
-  late File frontImage;
-  late File backImage;
   String frontImagePath = "";
   String backImagePath = "";
+  bool isFrontImageTaken = false;
+  bool isBackImageTaken = false;
   AnimationController? rotationController;
   final Duration animationDuration = Duration(milliseconds: 1000);
   @override
@@ -86,14 +84,7 @@ class _CameraPageState extends State<CameraPage> with TickerProviderStateMixin {
     return downloadUrl;
   }
 
-  Future<void> addPostToDatabase(
-      PostModel post, File imageFront, File imageBack) async {
-    String imageFrontUrl = await uploadImageToStorage(imageFront);
-    String imageBackUrl = await uploadImageToStorage(imageBack);
-
-    post.imageFrontPath = imageFrontUrl;
-    post.imageBackPath = imageBackUrl;
-
+  Future<void> addPostToDatabase(PostModel post) async {
     var newPostRef = _databaseRef.child('posts').push();
     newPostRef.set(post.toJson());
   }
@@ -115,21 +106,17 @@ class _CameraPageState extends State<CameraPage> with TickerProviderStateMixin {
         centerTitle: true,
         toolbarHeight: 78,
         elevation: 0,
-        title: Padding(
-            padding: EdgeInsets.only(right: 70),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(bottom: 50),
-                    child: Image.asset(
-                      "assets/rebeals.png",
-                      height: 130,
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(top: 20), child: CountdownPage())
-              ],
-            )),
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            Padding(
+                padding: EdgeInsets.only(bottom: 50),
+                child: Image.asset(
+                  "assets/rebeals.png",
+                  height: 130,
+                )),
+          ],
+        ),
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.black,
@@ -289,14 +276,14 @@ class _CameraPageState extends State<CameraPage> with TickerProviderStateMixin {
       if (!mounted) {
         return;
       }
-      _controller?.getMinZoomLevel().then((value) {
-        zoomLevel = value;
-        minZoomLevel = value;
-      });
-      _controller?.getMaxZoomLevel().then((value) {
-        maxZoomLevel = value;
-      });
-      _controller?.startImageStream(_processCameraImage);
+      // _controller?.getMinZoomLevel().then((value) {
+      //   zoomLevel = value;
+      //   minZoomLevel = value;
+      // });
+      // _controller?.getMaxZoomLevel().then((value) {
+      //   maxZoomLevel = value;
+      // });
+      // _controller?.startImageStream(_processCameraImage);
       setState(() {});
     });
   }
@@ -304,67 +291,37 @@ class _CameraPageState extends State<CameraPage> with TickerProviderStateMixin {
   Future<void> _takePicture() async {
     HapticFeedback.heavyImpact();
     var state = Provider.of<AuthState>(context, listen: false);
-    if (_cameraIndex == 0 || _cameraIndex == 2) {
-      XFile frontImageFile = await _controller!.takePicture();
-      await _startLiveFeed();
-      setState(() {
-        frontImage = File(frontImageFile.path);
+    _controller!.takePicture().then((fpath) async {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _switchFrontCamera();
       });
-      await _startLiveFeed();
-      uploadImageToStorage(frontImage).then((path) {
-        setState(() {
-          frontImagePath = path;
-        });
-      });
-      UserModel user = UserModel(
-        displayName: state.profileUserModel!.displayName ?? "",
-        profilePic: state.profileUserModel!.profilePic,
-        userId: state.profileUserModel!.userId,
-      );
-      PostModel post = PostModel(
-        user: user,
-        imageFrontPath: frontImagePath,
-        imageBackPath: backImagePath,
-        createdAt: DateTime.now().toUtc().toString(),
-      );
-      addPostToDatabase(post, backImage, frontImage);
-    }
-
-    if (_cameraIndex == 1 || _cameraIndex == 2) {
-      int previousCameraIndex = _cameraIndex;
-      _cameraIndex = 0;
-      await _stopLiveFeed();
-      await _startLiveFeed();
-      XFile backImageFile = await _controller!.takePicture();
-      setState(() {
-        backImage = File(backImageFile.path);
-      });
-      _cameraIndex = previousCameraIndex;
-      await _stopLiveFeed();
-      await _startLiveFeed();
-      uploadImageToStorage(backImage).then((path) {
+      uploadImageToStorage(File(fpath.path)).then((path) {
         setState(() {
           backImagePath = path;
         });
       });
-      UserModel user = UserModel(
-        displayName: state.profileUserModel!.displayName ?? "",
-        profilePic: state.profileUserModel!.profilePic,
-        userId: state.profileUserModel!.userId,
-      );
-      PostModel post = PostModel(
-        user: user,
-        imageFrontPath: frontImagePath,
-        imageBackPath: backImagePath,
-        createdAt: DateTime.now().toUtc().toString(),
-      );
-      addPostToDatabase(post, backImage, frontImage);
-    }
+      return _controller!.takePicture();
+    }).then((bpath) {
+      uploadImageToStorage(File(bpath.path)).then((path) {
+        UserModel user = UserModel(
+          displayName: state.profileUserModel!.displayName ?? "",
+          profilePic: state.profileUserModel!.profilePic,
+          userId: state.profileUserModel!.userId,
+          localisation: state.profileUserModel!.localisation,
+        );
+        PostModel post = PostModel(
+          user: user,
+          imageFrontPath: backImagePath,
+          imageBackPath: path,
+          createdAt: DateTime.now().toUtc().toString(),
+        );
+        addPostToDatabase(post);
+      });
+      return bpath;
+    });
   }
 
   Future _stopLiveFeed() async {
-    await _controller?.stopImageStream();
-    await _controller?.dispose();
     _controller = null;
   }
 
