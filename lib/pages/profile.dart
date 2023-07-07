@@ -145,22 +145,22 @@ class _ProfilePageState extends State<ProfilePage> {
               (x) => now.difference(DateTime.parse(x.createdAt)).inHours < 104)
           .toList();
     }
-    // list!.insert(
-    //     0,
-    //     PostModel(
-    //       imageFrontPath:
-    //           "https://htmlcolorcodes.com/assets/images/colors/black-color-solid-background-1920x1080.png",
-    //       imageBackPath:
-    //           "https://htmlcolorcodes.com/assets/images/colors/black-color-solid-background-1920x1080.png",
-    //       createdAt: "",
-    //       bio: "",
-    //       user: UserModel(
-    //         displayName: "",
-    //       ),
-    //     ));
+    list!.insert(
+        0,
+        PostModel(
+          imageFrontPath:
+              "https://htmlcolorcodes.com/assets/images/colors/black-color-solid-background-1920x1080.png",
+          imageBackPath:
+              "https://htmlcolorcodes.com/assets/images/colors/black-color-solid-background-1920x1080.png",
+          createdAt: "",
+          bio: "",
+          user: UserModel(
+            displayName: "",
+          ),
+        ));
     DateTime? createdAt;
 
-    if (list!.last.createdAt.isNotEmpty) {
+    if (list.last.createdAt.isNotEmpty) {
       createdAt = DateTime.parse(list.last.createdAt);
     }
     String? timeAgo;
@@ -473,8 +473,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               1.2,
                                           child: CachedNetworkImage(
                                               fit: BoxFit.cover,
-                                              imageUrl: list
-                                                  .last.imageFrontPath
+                                              imageUrl: list.last.imageFrontPath
                                                   .toString()),
                                         )))),
                             ClipRRect(
@@ -523,14 +522,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
-                                      "   REBEAL DU JOUR",
+                                      timeAgo == null
+                                          ? ""
+                                          : "   REBEAL DU JOUR",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
-                                      "   $timeAgo",
+                                      timeAgo == null ? "" : "   $timeAgo",
                                       style: TextStyle(
                                           color: Colors.grey, fontSize: 12),
                                       textAlign: TextAlign.left,
