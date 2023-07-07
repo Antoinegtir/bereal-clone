@@ -6,7 +6,7 @@ import 'appState.dart';
 
 class SearchState extends AppStates {
   bool isBusy = false;
-  SortUser sortBy = SortUser.MaxFollower;
+  SortUser sortBy = SortUser.MAX_FOLLOWER;
   List<UserModel>? _userFilterlist;
   List<UserModel>? _userlist;
 
@@ -60,8 +60,7 @@ class SearchState extends AppStates {
     if (_userlist == null && _userlist!.isEmpty) {
       print("User list is empty");
       return;
-    }
-    else if (name != null) {
+    } else if (name != null) {
       _userFilterlist = _userlist!
           .where((x) =>
               x.userName != null &&
@@ -73,28 +72,28 @@ class SearchState extends AppStates {
 
   String get selectedFilter {
     switch (sortBy) {
-      case SortUser.Alphabetically:
+      case SortUser.ALPHABETICALY:
         _userFilterlist!
             .sort((x, y) => x.displayName!.compareTo(y.displayName!));
-        return "Alphabetically";
+        return "ALPHABETICALY";
 
-      case SortUser.MaxFollower:
+      case SortUser.MAX_FOLLOWER:
         _userFilterlist!;
         return "Popular";
 
-      case SortUser.Newest:
+      case SortUser.NEWEST:
         _userFilterlist!.sort((x, y) =>
             DateTime.parse(y.createAt!).compareTo(DateTime.parse(x.createAt!)));
-        return "Newest user";
+        return "NEWEST user";
 
-      case SortUser.Oldest:
+      case SortUser.OLDEST:
         _userFilterlist!.sort((x, y) =>
             DateTime.parse(x.createAt!).compareTo(DateTime.parse(y.createAt!)));
-        return "Oldest user";
+        return "OLDEST user";
 
-      case SortUser.Verified:
+      case SortUser.VERIFIED:
         _userFilterlist!;
-        return "Verified user";
+        return "VERIFIED user";
 
       default:
         return "Unknown";
