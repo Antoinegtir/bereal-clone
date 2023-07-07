@@ -473,7 +473,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               1.2,
                                           child: CachedNetworkImage(
                                               fit: BoxFit.cover,
-                                              imageUrl: list!
+                                              imageUrl: list
                                                   .last.imageFrontPath
                                                   .toString()),
                                         )))),
