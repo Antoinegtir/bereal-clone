@@ -77,11 +77,11 @@ class _ProfilePageState extends State<MyProfilePage> {
                               height: 120,
                               width: 120,
                               child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                height: 100,
-                                imageUrl: state.profileUserModel!.profilePic
-                                    .toString(),
-                              ),
+                                  fit: BoxFit.cover,
+                                  height: 100,
+                                  imageUrl: state
+                                          .profileUserModel?.profilePic ??
+                                      "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"),
                             ))),
                     Container(height: 10),
                     GestureDetector(

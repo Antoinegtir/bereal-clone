@@ -239,11 +239,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MediaQuery.of(context).size.height / 2,
                                   padding: const EdgeInsets.only(top: 0),
                                   child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: authstate
-                                            .profileUserModel.profilePic ??
-                                        'https://firebasestorage.googleapis.com/v0/b/nfts-a5f24.appspot.com/o/files%2Fbackground.png?alt=media&token=89375e94-d52e-4e69-8f97-94cf665f43ba',
-                                  ),
+                                      fit: BoxFit.cover,
+                                      imageUrl: authstate
+                                              .profileUserModel?.profilePic ??
+                                          "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(top: 150),

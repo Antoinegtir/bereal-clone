@@ -52,12 +52,11 @@ class _ShareButtonState extends State<ShareButton> {
                                     height: 40,
                                     width: 40,
                                     child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      height: 100,
-                                      imageUrl: state
-                                          .profileUserModel!.profilePic
-                                          .toString(),
-                                    ),
+                                        fit: BoxFit.cover,
+                                        height: 100,
+                                        imageUrl: state
+                                                .profileUserModel?.profilePic ??
+                                            "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"),
                                   )),
                               Container(
                                 width: 10,

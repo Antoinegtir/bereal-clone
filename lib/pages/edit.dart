@@ -189,9 +189,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       backgroundImage: (_image != null
                           ? FileImage(_image!)
                           : CachedNetworkImageProvider(
-                              scale: 3,
-                              state.profileUserModel!.profilePic.toString(),
-                            ) as ImageProvider)),
+                                  scale: 3,
+                                  state.profileUserModel?.profilePic ??
+                                      "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg")
+                              as ImageProvider)),
                   Padding(
                       padding: EdgeInsets.only(bottom: 5),
                       child: ClipRRect(

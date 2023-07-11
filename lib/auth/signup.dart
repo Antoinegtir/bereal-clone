@@ -186,6 +186,7 @@ class _SignupState extends State<Signup> {
     UserModel user = UserModel(
       email: _emailController.text.toLowerCase(),
       displayName: widget.name,
+      profilePic: "",
       userName: "@" + "${widget.name}" + "${Random().nextInt(1000)}",
     );
     state
