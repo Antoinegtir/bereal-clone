@@ -74,8 +74,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                             fit: BoxFit.cover,
                                             height: 100,
                                             imageUrl: state
-                                                .profileUserModel!.profilePic
-                                                .toString(),
+                                        .profileUserModel?.profilePic ??
+                                    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                                           ),
                                         )),
                                     Container(
