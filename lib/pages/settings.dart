@@ -71,12 +71,11 @@ class _SettingsPageState extends State<SettingsPage> {
                                           height: 65,
                                           width: 65,
                                           child: CachedNetworkImage(
-                                            fit: BoxFit.cover,
-                                            height: 100,
-                                            imageUrl: state
-                                        .profileUserModel?.profilePic ??
-                                    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
-                                          ),
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                              imageUrl: state.profileUserModel
+                                                      ?.profilePic ??
+                                                  "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"),
                                         )),
                                     Container(
                                       width: 10,
