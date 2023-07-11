@@ -44,12 +44,6 @@ class UserModel extends Equatable {
     key = map['key'];
     createAt = map['createAt'];
     fcmToken = map['fcmToken'];
-    if (map['followerList'] != null) {
-      followersList = <String>[];
-      map['followerList'].forEach((value) {
-        followersList!.add(value);
-      });
-    }
     if (map['followingList'] != null) {
       followingList = <String>[];
       map['followingList'].forEach((value) {
