@@ -1,6 +1,6 @@
 # ReBeal.
 
-<img height="200" src="https://github.com/Antoinegtir/bereal-clone/blob/main/assets/rebeals.png?raw=true"></img>
+<img height="200" src="https://github.com/Antoinegtir/bereal-clone/blob/main/client/assets/rebeals.png?raw=true"></img>
 
 
 ## Description:
