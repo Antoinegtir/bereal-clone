@@ -49,9 +49,9 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
     final state = Provider.of<SearchState>(context);
     final list = state.userlist;
     final Map<int, Widget> children = {
-      0: Text('Suggestions'),
-      1: Text('Amis'),
-      2: Text('Demandes'),
+      0: Text('Suggest'),
+      1: Text('Friends'),
+      2: Text('Ask'),
     };
     List<UserModel>? following;
     List<UserModel>? follower;
@@ -159,7 +159,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                 contentPadding:
                                     const EdgeInsets.only(left: 15, top: 5),
                                 alignLabelWithHint: true,
-                                hintText: 'Ajouter ou recherecher des amis',
+                                hintText: 'Add where search friends',
                                 hintStyle: const TextStyle(
                                     fontSize: 17,
                                     color: ReBealColor.ReBealLightGrey,
@@ -178,7 +178,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.only(top: 10),
                                   child: Text(
-                                    "Annuler\n",
+                                    "Cancel\n",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
@@ -234,7 +234,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                         width: 10,
                                       ),
                                       Text(
-                                        "AJOUTER TES CONTACTS",
+                                        "ADD YOU'RE CONTACTS",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w600,
@@ -275,7 +275,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                                                   .circular(
                                                                       90)),
                                                       child: Text(
-                                                        "AJOUTER",
+                                                        "ADD",
                                                         style: TextStyle(
                                                             fontSize: 13,
                                                             color: Colors.white,
@@ -302,7 +302,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                         width: 10,
                                       ),
                                       Text(
-                                        "PERSONNES QUE TU DOIS CONNAITRE",
+                                        "PERSON THAT YOU MIGHT KNOW",
                                         style: TextStyle(
                                             color: Color.fromARGB(
                                                 255, 203, 203, 203),
@@ -355,7 +355,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                             width: 10,
                           ),
                           Text(
-                            "MES AMIS (${following?.length ?? 0})",
+                            "MY FRIENDS (${following?.length ?? 0})",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -384,7 +384,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "DEMANDES D'AMI (${follower?.length ?? 0})",
+                                "FRIENDS REQUEST (${follower?.length ?? 0})",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
@@ -394,7 +394,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                 width: MediaQuery.of(context).size.width / 3,
                               ),
                               Text(
-                                "Envoyées ",
+                                "Sends ",
                                 style: TextStyle(
                                     color: ReBealColor.ReBealLightGrey,
                                     fontWeight: FontWeight.w600,
@@ -413,7 +413,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            "Assure toi d'accepter seulement tes vrais amis sur ReBeal.",
+                            "Ensure to accept only you're true friends on ReBeal.",
                             style: TextStyle(
                                 color: ReBealColor.ReBealDarkGrey,
                                 fontWeight: FontWeight.w600,

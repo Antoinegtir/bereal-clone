@@ -93,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _shareText(String name) {
     Share.share(
       "https://rebe.al/$name",
-      subject: "Découvre $name sur ReBeal.",
+      subject: "Discover $name on ReBeal.",
       sharePositionOrigin: Rect.fromLTWH(0, 0, 10, 10),
     );
   }
@@ -136,7 +136,6 @@ class _ProfilePageState extends State<ProfilePage> {
     var authstate = Provider.of<ProfileState>(context);
 
     List<PostModel>? list;
-    String id = widget.profileId;
     DateTime now = DateTime.now();
 
     if (state.feedlist != null && state.feedlist!.isNotEmpty) {
@@ -168,13 +167,13 @@ class _ProfilePageState extends State<ProfilePage> {
       Duration difference = now.difference(createdAt);
 
       if (difference.inSeconds < 60) {
-        timeAgo = 'Il y a quelques secondes';
+        timeAgo = 'A few seconds ago';
       } else if (difference.inMinutes < 60) {
         int minutes = difference.inMinutes;
-        timeAgo = 'Il y a $minutes minute${minutes > 1 ? 's' : ''}';
+        timeAgo = 'Few $minutes minute${minutes > 1 ? 's' : ''} ago';
       } else {
         int hours = difference.inHours;
-        timeAgo = 'Il y a $hours heure${hours > 1 ? 's' : ''}';
+        timeAgo = 'Few $hours heure${hours > 1 ? 's' : ''} ago';
       }
     }
     return authstate.isbusy
@@ -241,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: CachedNetworkImage(
                                       fit: BoxFit.cover,
                                       imageUrl: authstate
-                                              .profileUserModel?.profilePic ??
+                                              .profileUserModel.profilePic ??
                                           "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"),
                                 ),
                                 Padding(
@@ -378,7 +377,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             width: 9,
                                                           ),
                                                           Text(
-                                                            'Ajouter',
+                                                            'Add',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.black,
@@ -404,7 +403,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   : isFollower()
                                       ? Container()
                                       : Text(
-                                          'Ajoute tes vrais amis sur ReBeal.',
+                                          'Add you\'re true friends on ReBeal.',
                                           style: TextStyle(
                                             color: ReBealColor.ReBealLightGrey,
                                             fontSize: 13,
@@ -424,7 +423,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               padding: EdgeInsets.only(
                                                   top: 20, left: 20),
                                               child: Text(
-                                                'AMIS EN COMMUN ()',
+                                                'COMMON FRIENDS ()',
                                                 style: TextStyle(
                                                   color: Color.fromARGB(
                                                       255, 231, 231, 231),
@@ -521,9 +520,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
-                                      timeAgo == null
-                                          ? ""
-                                          : "   REBEAL DU JOUR",
+                                      timeAgo == null ? "" : "   REBEAL OF DAY",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 13,

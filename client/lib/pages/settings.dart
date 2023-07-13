@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
             title: FadeInRight(
                 duration: Duration(milliseconds: 300),
                 child: Text(
-                  "Réglages",
+                  "Settings",
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w700),
                 ))),
@@ -120,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 30,
                 ),
                 Text(
-                  "A propos",
+                  "About",
                   style: TextStyle(color: Color.fromARGB(255, 65, 65, 65)),
                 ),
                 Container(
@@ -130,7 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     onTap: () {
                       Share.share(
                         "rebe.al/${state.profileUserModel!.userName!.replaceAll("@", "").toLowerCase()}",
-                        subject: "Ajoute-moi sur ReBeal.",
+                        subject: "Add me on ReBeal.",
                         sharePositionOrigin: Rect.fromLTWH(0, 0, 10, 10),
                       );
                     },
@@ -149,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                                 Icon(CupertinoIcons.share),
                                 Text(
-                                  "Partager ReBeal",
+                                  "Share ReBeal",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
@@ -185,7 +185,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: ReBealColor.ReBealDarkGrey,
                           alignment: Alignment.center,
                           child: Text(
-                            "Se Déconnecter",
+                            "Log out",
                             style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.w500,
@@ -207,7 +207,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 40,
                 ),
                 Text(
-                  "Tu as rejoins ReBeal il y a deja plusieurs jours le " +
+                  "You join BeReal on a few days ago" +
                       Utility.getdob(
                           state.profileUserModel!.createAt.toString()),
                   textAlign: TextAlign.center,

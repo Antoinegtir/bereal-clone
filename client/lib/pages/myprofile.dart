@@ -151,7 +151,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                               width: 5,
                             ),
                             Text(
-                              "Seulement visible par toi.",
+                              "Only visible for me.",
                               style: TextStyle(
                                   color: ReBealColor.ReBealLightGrey,
                                   fontSize: 12,
@@ -176,7 +176,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "14 derniers jours",
+                                    "14 last days",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,

@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             padding: EdgeInsets.only(left: 20),
                             child: Tab(
                               child: Text(
-                                'Mes Amis',
+                                'My Friends',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(right: 0),
                       child: Tab(
                           child: Text(
-                        'Amis d\'Amis',
+                        'Friends of Friends',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
@@ -365,7 +365,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           padding: EdgeInsets.only(
                                               top: 10, left: 10),
                                           child: Text(
-                                            "DÉCOUVRE TES\nAMIS D'AMIS",
+                                            "DISCOVER YOU'RE\nFRIENDS OF FRIENDS",
                                             style: TextStyle(
                                                 fontSize: 28,
                                                 color: Colors.white,
@@ -409,7 +409,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   ),
                                                   child: Center(
                                                       child: Text(
-                                                    "Partager ton ReBeal pour découvrir",
+                                                    "Share ReBeal in order to discover",
                                                     style: TextStyle(
                                                         fontFamily: "icons.ttf",
                                                         color: Colors.black,

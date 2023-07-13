@@ -31,13 +31,13 @@ class _GridPostWidgetState extends State<GridPostWidget> {
       Duration difference = now.difference(createdAt);
 
       if (difference.inSeconds < 60) {
-        timeAgo = 'Il y a quelques secondes';
+        timeAgo = 'A few seconds ago';
       } else if (difference.inMinutes < 60) {
         int minutes = difference.inMinutes;
-        timeAgo = 'Il y a $minutes minute${minutes > 1 ? 's' : ''}';
+        timeAgo = '$minutes minute${minutes > 1 ? 's' : ''} ago';
       } else {
         int hours = difference.inHours;
-        timeAgo = 'Il y a $hours heure${hours > 1 ? 's' : ''}';
+        timeAgo = 'A few $hours hours${hours > 1 ? 's' : ''} ago';
       }
     }
 

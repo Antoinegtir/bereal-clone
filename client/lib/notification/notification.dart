@@ -38,7 +38,7 @@ class _NotificationState extends State<NotifcationTest> {
               height: 30,
             ),
             Text(
-              "${state.profileUserModel!.displayName}, on sait que tu peux y arriver !\n Appuie sur la\nnotification pour prendre ton\n premier ReBeal.",
+              "\n${state.profileUserModel!.displayName}, we know you can do it!\nTap the\nnotification to get your first ReBeal.",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 40,
@@ -64,7 +64,7 @@ class _NotificationState extends State<NotifcationTest> {
                         Padding(
                             padding: EdgeInsets.only(top: 5, left: 5),
                             child: Text(
-                              "Désactive \"ne pas dérangerer\"\n",
+                              "Disable to not disturb",
                               style: TextStyle(
                                   color: Color.fromARGB(255, 101, 101, 101)),
                             )),
@@ -84,7 +84,7 @@ class _NotificationState extends State<NotifcationTest> {
                               ),
                               child: Center(
                                   child: Text(
-                                "Renvoyer la notification",
+                                "Resend notification",
                                 style: TextStyle(
                                     fontFamily: "icons.ttf",
                                     color: Colors.black,

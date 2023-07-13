@@ -82,7 +82,7 @@ class _ContactPageState extends State<ContactPage> {
                   height: 130,
                 ),
                 Text(
-                  "Trouver tes amis\n",
+                  "Find you're friends\n",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 35,
@@ -90,7 +90,7 @@ class _ContactPageState extends State<ContactPage> {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "Trouvons qui parmi tes amis utilise\n déjà sur Rebeal.",
+                  "Find you're friends that already\nuse Rebeal.",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

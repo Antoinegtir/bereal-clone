@@ -16,7 +16,7 @@ class ShareButton extends StatefulWidget {
 void shareText(String text) {
   Share.share(
     text,
-    subject: "Ajoute-moi sur ReBeal.",
+    subject: "Follow me on ReBeal.",
     sharePositionOrigin: Rect.fromLTWH(0, 0, 10, 10),
   );
 }
@@ -65,7 +65,7 @@ class _ShareButtonState extends State<ShareButton> {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: 'Invite tes amis sur ReBeal\n',
+                                      text: 'Invite you\'re friends on ReBeal\n',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 15,

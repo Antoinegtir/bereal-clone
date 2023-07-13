@@ -1,26 +1,30 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rebeal/Auth/signup.dart';
 import '../animation/animation.dart';
 import '../widget/custom/rippleButton.dart';
-import 'birth.dart';
 
-class NamePage extends StatefulWidget {
+class BirthPage extends StatefulWidget {
+  String name;
   final VoidCallback? loginCallback;
-  const NamePage({Key? key, this.loginCallback}) : super(key: key);
+  BirthPage({Key? key, required this.name, this.loginCallback})
+      : super(key: key);
 
   @override
-  _NamePageState createState() => _NamePageState();
+  _BirthPageState createState() => _BirthPageState();
 }
 
 bool empt = false;
 
-class _NamePageState extends State<NamePage> {
-  final _nameController = TextEditingController();
+class _BirthPageState extends State<BirthPage> {
+  final _birthController = TextEditingController();
 
   @override
   void initState() {
     setState(() {
-      _nameController.text.isNotEmpty ? empt = true : empt = false;
+      _birthController.text.isNotEmpty ? empt = true : empt = false;
     });
     super.initState();
   }
@@ -53,33 +57,53 @@ class _NamePageState extends State<NamePage> {
                   height: 130,
                 ),
                 Text(
-                  "C'est parti, comment tu t'appelles ?",
+                  "Hello ${widget.name}, what is you're birthday ?",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
                 ),
                 TextField(
                     textAlign: TextAlign.center,
                     onChanged: (value) {
                       setState(() {
-                        _nameController.text.isNotEmpty
+                        _birthController.text.isNotEmpty
                             ? empt = true
                             : empt = false;
                       });
+                      if (_birthController.text.length == 2) {
+                        _birthController.text = _birthController.text + " ";
+                        _birthController.selection = TextSelection.fromPosition(
+                            TextPosition(
+                                offset: _birthController.text.length,
+                                affinity: TextAffinity.upstream));
+                      }
+                      if (_birthController.text.length == 5) {
+                        _birthController.text = _birthController.text + " ";
+                        _birthController.selection = TextSelection.fromPosition(
+                            TextPosition(
+                                offset: _birthController.text.length,
+                                affinity: TextAffinity.upstream));
+                      }
+                      if (_birthController.text.length >= 11) {
+                        _birthController.text = _birthController.text
+                            .substring(0, _birthController.text.length - 1);
+                      }
                     },
+                    keyboardType: TextInputType.number,
                     keyboardAppearance: Brightness.dark,
-                    controller: _nameController,
+                    controller: _birthController,
                     decoration: InputDecoration(
-                        hintText: 'Ton nom',
+                        hintText: 'DD MM YYYY',
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                             color: Color.fromARGB(255, 60, 60, 60),
-                            fontSize: 45,
+                            fontSize: 38,
                             fontWeight: FontWeight.w800)),
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 45,
+                        fontSize: 38,
                         fontWeight: FontWeight.w800)),
               ],
             ),
@@ -98,14 +122,14 @@ class _NamePageState extends State<NamePage> {
                             height: 70,
                             width: MediaQuery.of(context).size.width - 40,
                             decoration: BoxDecoration(
-                              color: empt || _nameController.text.isNotEmpty
+                              color: empt || _birthController.text.isNotEmpty
                                   ? Colors.white
                                   : Color.fromARGB(255, 61, 61, 61),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
                                 child: Text(
-                              "Continuer",
+                              "Continue",
                               style: TextStyle(
                                   fontFamily: "icons.ttf",
                                   color: Colors.black,
@@ -113,16 +137,16 @@ class _NamePageState extends State<NamePage> {
                                   fontWeight: FontWeight.w800),
                             ))),
                         onPressed: () {
-                          if (_nameController.text.isNotEmpty &&
-                              _nameController.text.length < 30) {
+                          if (_birthController.text.isNotEmpty) {
                             HapticFeedback.heavyImpact();
                             Navigator.push(
                               context,
                               AwesomePageRoute(
                                 transitionDuration: Duration(milliseconds: 600),
                                 exitPage: widget,
-                                enterPage:
-                                    BirthPage(name: _nameController.text),
+                                enterPage: Signup(
+                                    name: widget.name,
+                                    birth: _birthController.text),
                                 transition: ZoomOutSlideTransition(),
                               ),
                             );

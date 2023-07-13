@@ -68,7 +68,7 @@ class UserTilePage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(90),
                           ),
                           child: Text(
-                            "AJOUTER",
+                            "ADD",
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.white,

@@ -88,12 +88,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               onTap: () {
                                 Navigator.pop(context);
                               },
-                              child: Text("Annuler",
+                              child: Text("Cancel",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18))),
                           GestureDetector(
                               onTap: _submitButton,
-                              child: Text("Enregistrer",
+                              child: Text("Save",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)))
                         ],
@@ -133,12 +133,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 Brightness.dark, // Définir le mode sombre
                           ),
                           child: CupertinoActionSheet(
-                            title: Text('Changer de photo de profil'),
+                            title: Text('Change of profile picture'),
                             message: Text(
-                                'Ta photo de profil est visible par tous et permetttra à tes amis de t\'ajoyter plus facilement'),
+                                'Your profile picture is visible to everyone and will make it easier for your friends to add you'),
                             actions: <Widget>[
                               CupertinoActionSheetAction(
-                                child: Text('Photothèque'),
+                                child: Text('Photo library'),
                                 onPressed: () {
                                   getImage(context, ImageSource.gallery,
                                       (file) {
@@ -163,7 +163,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ),
                               CupertinoActionSheetAction(
                                 child: Text(
-                                  'Supprimer la photo de profil',
+                                  'Delete you\'re profile picture',
                                   style: TextStyle(color: Colors.red),
                                 ),
                                 onPressed: () {
@@ -172,7 +172,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ),
                             ],
                             cancelButton: CupertinoActionSheetAction(
-                              child: Text('Annuler'),
+                              child: Text('Cancel'),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
@@ -223,7 +223,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Row(
                     children: [
                       Text(
-                        'Nom Complet  ',
+                        'Full Name  ',
                         style: TextStyle(color: Colors.white),
                       ),
                       Expanded(
@@ -233,7 +233,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nom Complet',
+                            hintText: 'Full Name',
                             hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 79, 79, 79))),
                       )),
@@ -247,7 +247,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Row(
                     children: [
                       Text(
-                        'Nom d\'utilisateur  ',
+                        'User name  ',
                         style: TextStyle(color: Colors.white),
                       ),
                       Expanded(
@@ -257,7 +257,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nom d\'utilisateur',
+                            hintText: 'User name',
                             hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 79, 79, 79))),
                       )),
@@ -298,7 +298,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Row(
                     children: [
                       Text(
-                        'Localisation  ',
+                        'Localization  ',
                         style: TextStyle(color: Colors.white),
                       ),
                       Expanded(
@@ -308,7 +308,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Localisation',
+                            hintText: 'Localization',
                             hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 79, 79, 79))),
                       )),
