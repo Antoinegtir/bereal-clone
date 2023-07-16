@@ -6,13 +6,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rebeal/model/post.dart';
-import 'package:rebeal/state/post.dart';
-import 'package:rebeal/state/profile_state.dart';
+import 'package:rebeal/model/post.module.dart';
+import 'package:rebeal/state/post.state.dart';
+import 'package:rebeal/state/profile.state.dart';
 import 'package:rebeal/styles/color.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../model/user.dart';
+import '../model/user.module.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.profileId, this.scaffoldKey})

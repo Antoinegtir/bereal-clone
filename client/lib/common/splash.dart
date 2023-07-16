@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rebeal/auth/name.dart';
 import 'package:rebeal/helper/enum.dart';
-import 'package:rebeal/state/authState.dart';
+import 'package:rebeal/state/auth.state.dart';
 import 'package:rebeal/pages/home.dart';
-import 'package:rebeal/state/profile_state.dart';
+import 'package:rebeal/state/profile.state.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

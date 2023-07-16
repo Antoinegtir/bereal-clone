@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rebeal/state/authState.dart';
+import 'package:rebeal/state/auth.state.dart';
 import 'package:rebeal/pages/settings.dart';
 import 'package:rebeal/widget/memories.dart';
 import 'package:rebeal/widget/share.dart';

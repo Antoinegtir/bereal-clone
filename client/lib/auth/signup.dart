@@ -5,8 +5,8 @@ import 'package:rebeal/permission/contact.dart';
 import 'package:rebeal/animation/animation.dart';
 import 'package:rebeal/helper/utility.dart';
 import 'package:provider/provider.dart';
-import '../model/user.dart';
-import '../state/authState.dart';
+import '../model/user.module.dart';
+import '../state/auth.state.dart';
 import '../widget/custom/rippleButton.dart';
 
 class Signup extends StatefulWidget {

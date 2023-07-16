@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:rebeal/helper/enum.dart';
 import 'package:rebeal/helper/shared_prefrence_helper.dart';
 import 'package:rebeal/helper/utility.dart';
-import 'package:rebeal/model/user.dart';
-import 'package:rebeal/state/appState.dart';
+import 'package:rebeal/model/user.module.dart';
+import 'package:rebeal/state/app.state.dart';
 import '../common/locator.dart';
 import 'package:path/path.dart' as path;
 

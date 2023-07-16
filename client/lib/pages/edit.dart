@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:rebeal/state/authState.dart';
+import 'package:rebeal/state/auth.state.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class EditProfilePage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:rebeal/helper/enum.dart';
 import 'package:rebeal/helper/utility.dart';
-import 'package:rebeal/model/user.dart';
-import 'appState.dart';
+import 'package:rebeal/model/user.module.dart';
+import 'app.state.dart';
 
 class SearchState extends AppStates {
   bool isBusy = false;

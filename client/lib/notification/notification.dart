@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rebeal/common/splash.dart';
-import 'package:rebeal/state/authState.dart';
+import 'package:rebeal/state/auth.state.dart';
 import '../widget/custom/rippleButton.dart';
 
 class NotifcationTest extends StatefulWidget {

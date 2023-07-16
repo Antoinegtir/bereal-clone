@@ -5,11 +5,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:rebeal/camera/camera.dart';
-import 'package:rebeal/model/post.dart';
-import 'package:rebeal/model/user.dart';
-import 'package:rebeal/state/authState.dart';
-import 'package:rebeal/state/post.dart';
-import 'package:rebeal/state/searchState.dart';
+import 'package:rebeal/model/post.module.dart';
+import 'package:rebeal/model/user.module.dart';
+import 'package:rebeal/state/auth.state.dart';
+import 'package:rebeal/state/post.state.dart';
+import 'package:rebeal/state/search.state.dart';
 import 'package:rebeal/styles/color.dart';
 import 'package:rebeal/pages/myprofile.dart';
 import 'package:rebeal/widget/feedpost.dart';
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   tabs: [
                     FadeInUp(
                         child: Padding(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.only(left: 10),
                             child: Tab(
                               child: Text(
                                 'My Friends',
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(right: 0),
                       child: Tab(
                           child: Text(
-                        'Friends of Friends',
+                        'Friends',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
