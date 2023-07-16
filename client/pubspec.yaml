@@ -23,7 +23,6 @@ dependencies:
   firebase_storage: ^11.0.16
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^5.0.0
   flutter_native_splash: ^2.2.18
   get_it: ^7.2.0
   iconsax: ^0.0.8
