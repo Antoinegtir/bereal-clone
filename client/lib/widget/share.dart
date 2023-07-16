@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rebeal/state/authState.dart';
+import 'package:rebeal/state/auth.state.dart';
 import 'package:rebeal/styles/color.dart';
 import 'package:share_plus/share_plus.dart';
 

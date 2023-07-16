@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:rebeal/model/user.dart';
+import 'package:rebeal/model/user.module.dart';
 import 'package:rebeal/pages/profile.dart';
 import 'package:rebeal/styles/color.dart';
 import 'package:rebeal/widget/custom/title_text.dart';
