@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:rebeal/common/splash.dart';
 import 'package:rebeal/state/auth.state.dart';
@@ -59,7 +60,7 @@ class _NotificationState extends State<NotifcationTest> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(IconData(0xf02a1, fontFamily: 'MaterialIcons'),
+                        Icon(Iconsax.notification,
                             color: Color.fromARGB(255, 101, 101, 101)),
                         Padding(
                             padding: EdgeInsets.only(top: 5, left: 5),
