@@ -1,9 +1,6 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import '../animation/animation.dart';
 import '../notification/notification.dart';
 
@@ -16,26 +13,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  Future<void> requestNotificationPermission() async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-   
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Sample Notification',
-      'This is a sample notification',
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'channel_id',
-          'channel_name',
-          'channel_description',
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
-        iOS: IOSNotificationDetails(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,24 +80,24 @@ class _NotificationPageState extends State<NotificationPage> {
                   GestureDetector(
                       onTap: () async {
                         HapticFeedback.heavyImpact();
-                        FlutterLocalNotificationsPlugin
-                            flutterLocalNotificationsPlugin =
-                            FlutterLocalNotificationsPlugin();
-                        await flutterLocalNotificationsPlugin.show(
-                          0,
-                          'Sample Notification',
-                          'This is a sample notification',
-                          NotificationDetails(
-                            android: AndroidNotificationDetails(
-                              'channel_id',
-                              'channel_name',
-                              'channel_description',
-                              importance: Importance.max,
-                              priority: Priority.high,
-                            ),
-                            iOS: IOSNotificationDetails(),
-                          ),
-                        );
+                        // FlutterLocalNotificationsPlugin
+                        //     flutterLocalNotificationsPlugin =
+                        //     FlutterLocalNotificationsPlugin();
+                        // await flutterLocalNotificationsPlugin.show(
+                        //   0,
+                        //   'Sample Notification',
+                        //   'This is a sample notification',
+                        //   NotificationDetails(
+                        //     android: AndroidNotificationDetails(
+                        //       'channel_id',
+                        //       'channel_name',
+                        //       'channel_description',
+                        //       importance: Importance.max,
+                        //       priority: Priority.high,
+                        //     ),
+                        //     iOS: IOSNotificationDetails(),
+                        //   ),
+                        // );
                         Navigator.push(
                           context,
                           AwesomePageRoute(
