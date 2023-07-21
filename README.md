@@ -8,7 +8,8 @@
 The project aims to clone the BeReal social network in order to understand how this type of application could work, using Flutter framework & Firebase Database.
 This repository is use for educationnal content and as a challenge to clone the biggest part of this app in 48h, don't hesitate to read the contributing.md if you wanna add some cool functionnality that could inspire the official @BeReal org to implement them.
 
-### 🔗 Link of my article about architecture
+## 🔗 Link of my article about the implemtation
+
  <a href="https://medium.com/@zkhwctb/how-i-create-a-clone-of-bereal-7dbee8a915d5">
     <img src="https://img.shields.io/badge/medium-fff?style=for-the-badge&logo=medium&logoColor=black" alt="Medium">
 </a>
