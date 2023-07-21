@@ -137,14 +137,6 @@ class _FeedPostWidgetState extends State<FeedPostWidget> {
                                                     .toString())))),
                           ],
                         )))),
-            Padding(
-                padding: EdgeInsets.only(top: 10, left: 10),
-                child: Text(
-                  "Antoine Gonthier",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.left,
-                ))
           ],
           crossAxisAlignment: CrossAxisAlignment.start,
         ));

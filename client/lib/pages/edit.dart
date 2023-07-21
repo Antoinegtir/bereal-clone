@@ -113,7 +113,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           title: FadeInRight(
               duration: Duration(milliseconds: 300),
               child: Text(
-                "Modifier le profil",
+                "Modify profile",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ))),
       body: SingleChildScrollView(
