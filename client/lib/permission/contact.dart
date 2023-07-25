@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:contacts_service/contacts_service.dart';
+// import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,14 +22,14 @@ class _ContactPageState extends State<ContactPage> {
   @override
   void initState() {
     super.initState();
-    ContactsService.getContacts().then((contacts) {
-      for (var contact in contacts) {
-        for (var email in contact.emails!) {
-          contactEmails.add(email.value!);
-        }
-      }
-      setState(() {});
-    });
+    // ContactsService.getContacts().then((contacts) {
+    //   for (var contact in contacts) {
+    //     for (var email in contact.emails!) {
+    //       contactEmails.add(email.value!);
+    //     }
+    //   }
+    //   setState(() {});
+    // });
   }
 
   @override

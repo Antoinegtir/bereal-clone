@@ -12,9 +12,7 @@ class Utility {
     if (date == null || date.isEmpty) {
       return '';
     }
-    var dt = DateTime.parse(date).toLocal();
-    var dat = DateFormat.yMMMd().format(dt);
-    return dat;
+    return "";
   }
 
   static String getUserName({

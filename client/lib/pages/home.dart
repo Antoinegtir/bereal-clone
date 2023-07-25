@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     var authState = Provider.of<AuthState>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       authState.getCurrentUser();
+      authState.getCurrentUser();
       initPosts();
       initSearch();
       initProfile();

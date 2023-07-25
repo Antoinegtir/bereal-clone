@@ -1,5 +1,5 @@
 // ignore_for_file: must_be_immutable
-import 'package:contacts_service/contacts_service.dart';
+// import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,18 +20,17 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
   late TabController _tabController;
-  List<String> contactEmails = [];
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
-    ContactsService.getContacts().then((contacts) {
-      for (var contact in contacts) {
-        for (var email in contact.emails!) {
-          contactEmails.add(email.value!);
-        }
-      }
-      setState(() {});
-    });
+    // ContactsService.getContacts().then((contacts) {
+    //   for (var contact in contacts) {
+    //     for (var email in contact.emails!) {
+    //       contactEmails.add(email.value!);
+    //     }
+    //   }
+    //   setState(() {});
+    // });
     super.initState();
   }
 
@@ -245,57 +244,57 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                   Container(
                                     height: 10,
                                   ),
-                                  Expanded(
-                                      child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: 4,
-                                    itemBuilder: (context, index) {
-                                      return ListTile(
-                                          title: Text(contactEmails[index]),
-                                          leading: Icon(
-                                            CupertinoIcons.profile_circled,
-                                            size: 50,
-                                          ),
-                                          trailing: Container(
-                                              width: 120,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Container(
-                                                      height: 30,
-                                                      width: 90,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                          color: Color.fromARGB(
-                                                              221, 69, 69, 69),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      90)),
-                                                      child: Text(
-                                                        "ADD",
-                                                        style: TextStyle(
-                                                            fontSize: 13,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w800),
-                                                      )),
-                                                  Container(
-                                                    width: 10,
-                                                  ),
-                                                  Icon(
-                                                    Icons.close,
-                                                    size: 18,
-                                                    color: ReBealColor
-                                                        .ReBealLightGrey,
-                                                  )
-                                                ],
-                                              )));
-                                    },
-                                  )),
+                                  // Expanded(
+                                  //     child: ListView.builder(
+                                  //   physics: NeverScrollableScrollPhysics(),
+                                  //   itemCount: 4,
+                                  //   itemBuilder: (context, index) {
+                                  //     return ListTile(
+                                  //         title: Text(contactEmails[index]),
+                                  //         leading: Icon(
+                                  //           CupertinoIcons.profile_circled,
+                                  //           size: 50,
+                                  //         ),
+                                  //         trailing: Container(
+                                  //             width: 120,
+                                  //             child: Row(
+                                  //               mainAxisAlignment:
+                                  //                   MainAxisAlignment.end,
+                                  //               children: [
+                                  //                 Container(
+                                  //                     height: 30,
+                                  //                     width: 90,
+                                  //                     alignment:
+                                  //                         Alignment.center,
+                                  //                     decoration: BoxDecoration(
+                                  //                         color: Color.fromARGB(
+                                  //                             221, 69, 69, 69),
+                                  //                         borderRadius:
+                                  //                             BorderRadius
+                                  //                                 .circular(
+                                  //                                     90)),
+                                  //                     child: Text(
+                                  //                       "ADD",
+                                  //                       style: TextStyle(
+                                  //                           fontSize: 13,
+                                  //                           color: Colors.white,
+                                  //                           fontWeight:
+                                  //                               FontWeight
+                                  //                                   .w800),
+                                  //                     )),
+                                  //                 Container(
+                                  //                   width: 10,
+                                  //                 ),
+                                  //                 Icon(
+                                  //                   Icons.close,
+                                  //                   size: 18,
+                                  //                   color: ReBealColor
+                                  //                       .ReBealLightGrey,
+                                  //                 )
+                                  //               ],
+                                  //             )));
+                                  //   },
+                                  // )),
                                   Row(
                                     children: [
                                       Container(

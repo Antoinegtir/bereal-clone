@@ -71,7 +71,7 @@ class _NamePageState extends State<NamePage> {
                     keyboardAppearance: Brightness.dark,
                     controller: _nameController,
                     decoration: InputDecoration(
-                        hintText: 'You\'re nom',
+                        hintText: 'You\'re name',
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                             color: Color.fromARGB(255, 60, 60, 60),
